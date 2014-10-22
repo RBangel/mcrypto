@@ -17,6 +17,7 @@ use std::os;
 static HEXMAP: &'static str = "0123456789ABCDEF";
 static BASE64MAP: &'static str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
+#[deriving(PartialEq)]
 struct Byte {
   value: int,
 }
@@ -32,6 +33,7 @@ impl Byte {
   }
 }
 
+#[deriving(PartialEq)]
 struct ByteString {
   bytes: Vec<Byte>,
 }
@@ -59,6 +61,12 @@ impl ByteString {
     String::from_str("ABC")
   }
 }
+
+// impl TotalEq for ByteString {
+//   fn equals(&self, other: &Self) -> bool {
+//     self.bytes == other.bytes
+//   }
+// }
 
 // fn hex_to_bytestring(hexstr: &str) {
 //   let res: Vec<uint> = hexstr.as_slice().chars().map(|x| x.to_uppercase()
@@ -122,7 +130,7 @@ fn test_bs_to_hex() {
 }
 
 #[test]
-fn test_bs_frim_hex() {
+fn test_bs_from_hex() {
   let teststr = "ABC123";
   let a = Byte { value: 171 };
   let b = Byte { value: 193 };
@@ -130,7 +138,7 @@ fn test_bs_frim_hex() {
   let expected = ByteString {bytes: vec!(a, b, c)};
   let results = ByteString::from_hex(teststr); 
   if results != expected {
-    fail!("hex 'ABC123' shoudl result in ByteString(171, 193, 35)");
+    fail!("hex 'ABC123' should result in ByteString(171, 193, 35)");
   }
 }
 
