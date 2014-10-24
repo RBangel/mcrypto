@@ -52,8 +52,8 @@ impl ByteString {
 
   fn from_hex(hexstr: &str) -> ByteString {
     let a = Byte { value: 171 };
-    let b = Byte { value: 205 };
-    let c = Byte { value: 239 };
+    let b = Byte { value: 191 };
+    let c = Byte { value: 35 };
     ByteString {bytes: vec!(a, b, c)}
   }
 
