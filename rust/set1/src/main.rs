@@ -13,6 +13,7 @@
 /// Always operate on raw bytes, never on encoded strings. Only use hex and base64 for pretty-printing.
 
 use std::os;
+use std::fmt;
 
 static HEXMAP: &'static str = "0123456789ABCDEF";
 static BASE64MAP: &'static str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -30,6 +31,22 @@ impl Byte {
     let lc = hmap.char_at(lv as uint);
     let rc = hmap.char_at(rv as uint);
     (lc, rc)
+  }
+
+  fn from_hex(inchar: (char, char)) -> Byte {
+    let lc = inchar.val0();
+    let rc = inchar.val1();
+    let hmap = HEXMAP.as_slice();
+    let lv = hmap.find(lc);
+    let rv = hmap.find(rc);
+    let result = (lv.unwrap() << 4) + (rv.unwrap());
+    Byte { value: result as int }
+  }
+}
+
+impl fmt::Show for Byte {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    self.value.fmt(f)
   }
 }
 
@@ -51,10 +68,16 @@ impl ByteString {
   }
 
   fn from_hex(hexstr: &str) -> ByteString {
-    let a = Byte { value: 171 };
-    let b = Byte { value: 191 };
-    let c = Byte { value: 35 };
-    ByteString {bytes: vec!(a, b, c)}
+    let mut result = vec!();
+
+    for pair in hexstr.as_bytes().chunks(2) {
+      let val1:char = pair[0] as char;
+      let val2:char = pair[1] as char;
+      let val = Byte::from_hex((val1, val2));
+      result.push(val)
+    }
+
+    ByteString { bytes: result }
   }
 
   fn to_b64(&self) -> String {
