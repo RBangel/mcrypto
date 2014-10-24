@@ -34,8 +34,8 @@ impl Byte {
   }
 
   fn from_hex(inchar: (char, char)) -> Byte {
-    let lc = inchar.val0();
-    let rc = inchar.val1();
+    let lc = inchar.val0().to_uppercase();
+    let rc = inchar.val1().to_uppercase();
     let hmap = HEXMAP.as_slice();
     let lv = hmap.find(lc);
     let rv = hmap.find(rc);
@@ -119,6 +119,33 @@ fn test_hexmap_size() {
 fn test_b64map_size() {
   if BASE64MAP.len() != 64 {
     fail!("BASE64MAP is the wrong size!");
+  }
+}
+
+#[test]
+fn test_byte_fromhex_upcase() {
+  let test = Byte::from_hex(('A', 'B'));
+  if test.value != 171 {
+    fail!("Byte::from_hex(('A', 'B')) should be value(171), not {}",
+    test.value)
+  }
+}
+
+#[test]
+fn test_byte_fromhex_downcase() {
+  let test = Byte::from_hex(('a', 'b'));
+  if test.value != 171 {
+    fail!("Byte::from_hex(('a', 'b')) should be value(171), not {}",
+    test.value)
+  }
+}
+
+#[test]
+fn test_byte_fromhex_mixcase() {
+  let test = Byte::from_hex(('A', 'b'));
+  if test.value != 171 {
+    fail!("Byte::from_hex(('A', 'b')) should be value(171), not {}",
+    test.value)
   }
 }
 
