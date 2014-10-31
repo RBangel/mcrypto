@@ -1,8 +1,16 @@
-# Matosana Challenge Set 1
+# Matasano Challenge Set 1
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure program to run the Matasano challenges
+
+## Requirements
+
+Leiningen
 
 ## Usage
 
 lein run
+
+## Run Tests
+
+lein test
 
